@@ -1,14 +1,11 @@
 ---
-title: 'League of Legends: Know Your Role'
+title: 'Final Report'
 author: "Ryan Transfiguracion"
 date: "July 23, 2018"
 output: html_document
 ---
 
 <style type="text/css">
-.title {
-  display: none;
-}
 
 .subtitle-text {
   font-size: 68px;

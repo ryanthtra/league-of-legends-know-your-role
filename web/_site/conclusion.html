@@ -9,11 +9,9 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Ryan Transfiguracion" />
 
-<meta name="date" content="2018-07-23" />
 
-<title>Final Report</title>
+<title>Conclusion</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -209,50 +207,18 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Final Report</h1>
-<h4 class="author"><em>Ryan Transfiguracion</em></h4>
-<h4 class="date"><em>July 23, 2018</em></h4>
+<h1 class="title toc-ignore">Conclusion</h1>
 
 </div>
 
 
-<style type="text/css">
-
-.subtitle-text {
-  font-size: 68px;
-  text-align: center;
-}
-.img-subtitle {
-  width: 68px;
-  height: 68px;
-  margin-bottom: 10px;
-}
-.rift-map {
-  text-align: center;
-}
-.img-rift-map {
-  width: 70%;
-  height: 70%;
-}
-</style>
-<img src="img/lol-logo.png" />
-<p class="subtitle-text">
-KN<img class="img-subtitle" src="img/top-icon.png"><img class="img-subtitle" src="img/jungle-icon.png"> Y<img class="img-subtitle" src="img/mid-icon.png">UR R<img class="img-subtitle" src="img/bot-icon.png"><img class="img-subtitle" src="img/support-icon.png">E
-</p>
-<section id="introduction" class="level2">
-<h2>Introduction</h2>
-<p>League of Legends (LoL) is a multiplayer online battle arena (MOBA) videogame by Riot Games. The primary game mode for LoL is Summoner’s Rift (also the name of the arena’s map), in which two teams of five players vie to destroy their opponents’ base, called the Nexus. For more detailed information about the game, please see <a href="https://en.wikipedia.org/wiki/League_of_Legends#Gameplay" target="_blank">League of Legends on Wikipedia.</a></p>
-<p>Each player in a match chooses one of 141 unique avatars, called champions, to represent them, and each champion has its own unique blend of attributes, skills, and abilities. Each one of these 141 champions is classified into one of six categories: assassin, fighter, mage, marksman, support, or tank.</p>
-<p>Additionally, each player on each competing team in a match plays one of five standard team roles: <strong><em>Top Laner</em></strong>, <strong><em>Jungler</em></strong>, <strong><em>Middle (Mid) Laner</em></strong>, <strong><em>Bottom Lane (Botlane) Carry</em></strong>, or <strong><em>Support</em></strong>. While each role performs specific duties, each can also be identified by its location on the map near the beginning of a match.</p>
-<p class="rift-map">
-<img class="img-rift-map" src="img/rift-map.jpg">
-</p>
-<p>The <strong><em>Top Laners</em></strong> traverse along the dirt path that travels along the west and north perimeters of the map. Near the start of the match they usually combat enemy minions and each other at the northwest corner of the map. This type of combat at the beginning of the match is called the <strong>Laning Phase</strong>.</p>
-<p>The <strong><em>Mid Laners</em></strong> traverse along the dirt path that cuts straight across the diagonal of the map connecting the two opposing bases. They, too, combat enemy minions and each other during the Laning Phase, where they typically compete right at the center of the map.</p>
-<p>The <strong><em>Botlane Carries</em></strong> and <strong><em>Supports</em></strong> traverse along the dirt path that travels along the south and east perimeters of the map. Their laning phase typically occurs at the southeast corner of the map. The <strong><em>Botlane Carries</em></strong> deliver damage to their opponents and enemy minions, while the <strong><em>Supports</em></strong> play an auxiliary role by providing protection to their botlane teammates.</p>
-<p>Finally, the <strong><em>Junglers</em></strong> traverse in the forest-like areas between the three lanes. One team’s jungle is in the west and south “triangles”, while the other team’s is in the north and east triangular areas. During the Laning Phase the <strong><em>Junglers</em></strong> are combating the monsters that inhabit these areas. They may occasionally encounter each other, especially if one Jungler “invades” their opponents’ jungle areas.</p>
-<p>Therefore, it’s nearly as easy to identify team roles in a League of Legends match as it is to identify the nine positions of the defensive players in a baseball game. The botlane is a little trickier, since both <strong><em>Carries</em></strong> and <strong><em>Supports</em></strong> are there, but by observing their behaviors during the laning phase the two roles are fairly simple to distinguish.</p>
-</section>
+<p>While exploring, analyzing, and visualizing the players’ match data of four professional eSports leagues and an international tournament, we were able to discover distinguishable features of the five team roles (Top, Jungle, Mid, Bot Carry, and Support) when we calculated the per-game averages of individual players.</p>
+<p>Based on this discovery, we first split the per-game averages per-player dataset into a 40/60 train/test pair. Then, we ran the <strong>k-means clustering</strong> algorithm through the training set, which showed 100 percent accuracy in classifying each per-game averages observation to one of five team roles. We then used the centroids computed by the k-means algorithm as the <strong><em>model</em></strong> for running the <strong>k-nearest-neighbor (knn) clustering</strong> algorithm through the per-game averages testing/validating set, which also showed 100 percent accuracy. Finally, we used the same <strong>k-means model</strong> to run the <strong>knn algorithm</strong> through the <strong><em>real</em></strong> test set, which contained single-game performance data of individual players. The <strong>knn</strong> run through the single-game performance data set showed that the model was <strong>94.7 percent accurate</strong> and achieved a <strong>Kappa score of 0.9346</strong>.</p>
+<p>To conclude, the <strong>k-means centroids model</strong> proved to be very accurate in classifying individual game performances of the Spring 2018 Season to an appropriate team role via the <strong>knn algorithm</strong>. While not absolutely perfect, this model (and model-making process) could be an excellent tool for classifying team roles in Normal/Blind Pick Summoner’s Rift game modes, where team roles cannot be assumed based on Participant ID alone. However, we must also consider caveats such as these:</p>
+<p><strong><em>Metas Change:</em></strong> Riot Games routinely makes changes to League of Legends – sometimes minor but sometimes paradigm-shifting. What may be a winning strategy in the present could be a losing one in the future, and that occasionally includes changing certain champions’ team roles.</p>
+<p><strong><em>Normal/Blind Pick Game Mode is Lower-Stakes:</em></strong> Because the competitiveness of this game mode can often times be less intense, players are more likely to experiment, which includes playing champions in atypical team roles.</p>
+<p><strong><em>Unique Champions:</em></strong> As mentioned before, some champions can play and succeed in a team role but may output performance data that is fitting of a different role. Swain and Vladimir are powerful Top Laners but are also mages. Gangplank is a dominant Top Laner with a damage output comparable to that of a Botlane Carry. Ivern is a Jungler but only equips one starting jungler item and plays more like a Support.</p>
+<p><strong><em>Pros are Pros:</em></strong> The level of competition in a professional LoL eSports league is a considerable step up from the Regular Joes playing the game. Even within the LoL game itself, the ranking system divides players in multiple tiers, where the “worst” players are in the Bronze division, while professionals (playing in their free time) and near-professionals are usually in the Master or Challenger divisions. Thus, the average output data of team roles may vary considerably from division to division.</p>
 
 
 

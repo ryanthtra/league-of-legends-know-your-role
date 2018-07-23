@@ -1,0 +1,129 @@
+---
+title: "Exploratory Analysis"
+output: html_notebook
+---
+
+For additional details on the exploratory analysis of the datasets see this document: [**ExploratoryAnalysisReport.pdf**](https://github.com/ryanthtra/lol-esports-data-analysis/blob/master/lol_pros_predictor/reports/ExploratoryAnalysisReport.pdf).  Below, we'll look at the features/variables that stood out in my findings for distinguishing team roles, as well as plots that show these distinguishing features.
+
+First, here are the variables that will be shown in the plots:
+
+```{r echo = FALSE, results = "asis"}
+library(knitr)
+variableName <- c("kills", "assists", "magicDamageDealt", "physicalDamageDealt", 
+                  "magicDamageDealtToChampions", "physicalDamageDealtToChampions", 
+                  "totalHeal", "totalUnitsHealed", "damageSelfMitigated", "totalDamageTaken",  
+                  "neutralMinionsKilled", "timeCCingOthers", "totalTimeCrowdControlDealt", 
+                  "champLevel", "visionWardsBoughtInGame", "wardsPlaced", "wardsKilled")
+description <- c("The number of enemy champions killed.", 
+"The number of enemy champions assisted in killing.", 
+"The amount of magic damage dealt.", 
+"The amount of physical damage dealt.", 
+"The amount of magic damage dealt to enemy champions only.",
+"The amount of physical damage dealt to enemy champions only.", 
+"The amount of health points the player has regained.", 
+"The number of entities a player healed.", 
+"The amount of health points that were not lost from damage.", 
+"The amount of damage a player took from various sources.", 
+"The number of neutral monsters killed by a player.", 
+"The weighted sum of all CC applied", 
+"The sum of all CC applied", 
+"The (experience) level of a player at the end of a match.", 
+"The number of wards (i.e. surveillance items) a player purchased.", 
+"The number of wards a player placed in the arena.", 
+"The number of enemy wards  a player destroyed.")
+df_vars <- data.frame(variableName, description)
+kable(df_vars)
+```
+
+The primary reason we're using these variables is because, as I was sorting this dataset by variables, I noticed how certain roles were at the top of some variables, while certain roles were always at the bottom for others.
+
+We'll be using the NALCS 2018 Spring Split per-game player averages dataset for creating these plots.
+```{r message=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+# Preparation for next nine plots.
+nalcs_matches_player_avgs <- read.csv("../datasets/nalcs/nalcs_spring2018_season_summoner_avgs.csv")
+nalcs_plot_player_avgs <- nalcs_matches_player_avgs %>%
+  filter(wins + losses >= 6) %>%
+  ggplot()
+```
+
+Here are the plots used for this exploratory analysis.
+
+```{r message=FALSE}
+#### Facet-wrapped plots
+nalcs_season_summoner_avgs_gathered <- nalcs_matches_player_avgs %>%
+  gather(kills, assists, magicDamageDealt, physicalDamageDealt, magicDamageDealtToChampions,
+         physicalDamageDealtToChampions, totalHeal, totalUnitsHealed, damageSelfMitigated, 
+         totalDamageTaken, neutralMinionsKilled, timeCCingOthers, totalTimeCrowdControlDealt, 
+         champLevel, visionWardsBoughtInGame, wardsPlaced, wardsKilled, key = "varName", 
+         value = "valuePerGame")
+
+# Template for next three plots
+nalcs_plot_player_avgs_gathered <- nalcs_season_summoner_avgs_gathered %>%
+  filter(wins + losses >= 6) %>%
+  ggplot()
+```
+```{r fig10, out.width="100%", fig.width=13, fig.asp=1, fig.align="center", message=FALSE}
+# Histograms
+nalcs_plot_player_avgs_gathered +
+  geom_histogram(mapping = aes(x = valuePerGame, y = ..density.., fill = teamRole), 
+                 color = "black", alpha = .6) +
+  facet_wrap(~varName, scales = "free", ncol = 4) +
+  labs(
+    title = "Player Averages Per Game Histograms, NALCS 2018 Spring Split",
+    subtitle = "Distribution of Values")
+```
+```{r fig11, out.width="100%", fig.width=13, fig.asp=1.00, fig.align='center', message=FALSE}
+# Density Plots
+nalcs_plot_player_avgs_gathered +
+  geom_density(mapping = aes(x = valuePerGame, color = teamRole, fill = teamRole), 
+               alpha = .3, size = 1) +
+  facet_wrap(~varName, scales = "free", ncol = 4) +
+  labs(
+    title = "Player Averages Per Game Density Plots, NALCS 2018 Spring Split",
+    subtitle = "Distribution of Values")
+```
+```{r fig12, out.width="100%", fig.width=12, fig.asp=1.33, fig.align='center', message=FALSE}
+# Box Plots
+nalcs_plot_player_avgs_gathered +
+  geom_boxplot(mapping = aes(x = teamRole, y = valuePerGame, fill = teamRole), 
+               size = 1.00, alpha = .6) +
+  geom_jitter(width = 0.15, mapping = aes(x = teamRole, y = valuePerGame, color = teamRole)) +
+  facet_wrap(~ varName, scales = "free", ncol = 3) +
+  theme(axis.text.x = element_text(angle=10, vjust=0.6)) +
+  labs(
+    title = "Player Averages per Game Box Plots, NALCS 2018 Spring Split",
+    subtitle = "Distribution Across Team Roles")
+```
+
+Here are some details and explanations of how and why the plots and data resulted as they did.
+
+**kills**: It's pretty clear in all three plots that ***Supports*** achieve the least number of kills per game, followed by ***Junglers*** and ***Top Laners***, while ***Mid Laners*** and Bottom Lane Carries are mixed together at the top.  The main explanations for ***Supports*** are that the champions representing them are typically inherently the weakest in terms of overall damage output, and that they play an auxiliary role in protecting their teammates in various ways.
+
+**assists**: We see nearly the opposite of **kills**.  ***Supports*** followed by ***Junglers*** average the most assists in a game.  ***Supports*** typically, though lacking in damage output, provide the most protection, CC, buffs, and/or debuffs, while ***Junglers*** provide ganks for their teammates since they roam throgh most of the map.
+
+**physical damage dealt/dealt to champions**: The champions selected by ***Botlane Carries*** are almost always ranged physical damage dealers aka marksmen.  Later in a match these ***Botlane Carries*** are capable of dealing high amounts of damage per second (dps) while typcially avoiding taking damage themselves, which make them less likely to be killed and, thus, be in fights longer to be able to deal such damage.  
+  Champions selected by ***Top Laners*** and ***Junglers*** are usually melee (close range) physical damage dealers, which make them more likely battle on the front lines of team fights, though ***Junglers*** usually use hit-and-run tactics like assassins, while ***Top Laners*** stay in the front line in a fight and also combat enemy ***Top Laners*** on top of enemy minions during the Laning Phase, which is why they deal more Physical Damage than do ***Junglers***.
+
+**magic damage dealt/dealt to champions**: The champions selected by ***Mid Laners*** are almost always inherently magic dealers or mages.  There are also some champions selected by ***Supports*** that can be played in mid lane roles in separate matches (such as Karma and Morgana), but as ***Supports***, those champions' main jobs for those players are not to damage enemies.
+
+**neutral minions killed**: Since all the neutral minions are only located in the jungle, it's obvious that ***Junglers*** would kill the most neutral minions, while the other roles only kill jungle monsters later in the match.
+
+**total damage taken**: While in-lane champions do combat their enemy counterparts and enemy minions during the laning phase, they also fight conservatively, because their main purpose in this phase is to accumulate gold and experience points (XP) by killing enemy minions, while their secondary purpose is to hinder their opponents' abilities of doing those things.  ***Junglers***, on the other hand, are almost always by themselves when they are killing the jungle monsters (i.e., neutral minions), which means they are also taking damage from these monsters, which explains why ***Junglers*** are usually at the top of the **totalDamageTaken** category.
+
+**total heal**: There are two primary reasons why ***Junglers*** have the highest total heal.  1. They almost always pick the summoner spell Smite, which is used to deal a large chunk of damage to monsters while also healing the caster of the spell.  2. Only champions who have Smite are capable of purchasing items (e.g., Hunter's Machete, Hunter's Talisman, Skirmisher's Sabre, and Stalker's Blade) that provide a significant amount of life steal (i.e., healing the attacker while dealing damage) against monsters.  Therefore, those equipped with these items will always heal themselves a lot, as long as they're attacking monsters.
+
+**total units healed**: While ***Junglers*** are typically capable of healing themselves, they are usually not able to heal their teammates, in which many champions suitable for the Support role are.  However, even if they are not (such as Braum, Morgana, Pyke, and Thresh), they may eventually purchase items that are capable of healing teammates, such as Redemption.  While it's true that any player can purchase Redemption, it's considered a suboptimal strategy if a non-Support player does so.
+
+**time CCing others** and **total time crowd control dealt**: A large number of champions that are selected for the Top Laner role have abilities that deal crowd control, which is essentially the hindrance of an opponent's mobility, while the most popular Top Lane champions in eSports are those which can deal crowd control to multiple enemy champions in an area, such as Cho'Gath, Ornn, Sion, and Swain.  The plots also show ***Mid Laners*** and ***Supports*** are capable of dealing crowd control, though those champions playing those roles ususually lack the durability and/or sustainability that is a key trait for a ***Top Laner***.
+
+**vision wards bought in game** and **wards placed**: The plots show that ***Junglers*** and ***Supports*** both purchase and place the most wards, i.e., surveillance items.  Since subterfuge is usually one of the main functions of ***Junglers*** (because they roam around so much of the map), it is important that while they try to gank enemy champions, they do not get counter-ganked or counter-jungled in return, so it's natural that they purchase and place wards to protect both themselves and their teammates.  
+For ***Supports***, because their main role is to provide auxiliary support, and because the enhancement items they typically purchase are usually less expensive than the items that players of other roles purchase, they have more "disposable income" to spend on and place wards.
+
+**wards killed**: The plots show that ***Junglers*** and ***Botlane Carries*** destroy the most wards.  For ***Junglers***, since they usually place wards in the jungle, it's almost natural that they would encounter wards placed by their enemies, as well, though enemy Control Wards can only be destroyed if they are revealed by a nearby allied Control Ward or an Oracle Lens.
+To explain why ***Botlane Carries*** destroy about an equal amount of wards, one can observe from watching a LoL match that ***Botlane Carries*** and ***Supports*** are "attached at the hip".  Though champions selected for ***Botlane Carry*** roles are usually capable dealing the most amount of sustained damage over a period of time, they are also considered the most fragile, and, thus, need a ***Support*** by their side in order to stay alive.  Therefore, since ***Supports*** place the most wards, since ***Botlane Carries*** and ***Supports*** stick together, and since ***Botlane Carries*** are the most efficient damage dealers, if a ***Support*** spots an enemy ward and their ***Botlane Carry*** partner is nearby, then it's more time efficient for the ***Botlane Carry*** to destroy the enemy ward.
+
+### Exploratory Analysis Conclusion
+With such distinguishable features, it may be possible to classify players and/or champions based on their performance data.  ***Top Laners*** get the least assists, do the least healing of others, and deal the most crowd control time.  ***Junglers*** heal themselves the most, take and self-mitigate the most total damage, kill the most neutral minions, and buy, purchase, and kill the second-most wards.  ***Mid Laners*** deal the most magic damage overall and to champions and have one of highest finishing champ levels.  ***Botlane Carries*** deal the most physical damage overall and to champions, are healed the least, take least damage, and kill the most wards.  Finally, ***Supports*** get the least kills but the most assists, deal the least amount of magic and physical damage overall, heal the most units, have the lowest finishing champ levels, and buy and place the most wards.

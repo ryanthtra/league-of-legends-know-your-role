@@ -8,3 +8,9 @@ navbar:
       href: problem.nb.html
     - text: "Data Dive"
       href: data.nb.html
+    - text: "Exploratory Analysis"
+      href: analysis.nb.html
+    - text: "Machine Learning"
+      href: machine-learning.nb.html
+    - text: "Conclusion"
+      href: conclusion.html
