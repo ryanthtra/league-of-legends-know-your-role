@@ -1,0 +1,10 @@
+name: "my-website"
+navbar:
+  title: "LoL: Know Your Role"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Problem"
+      href: problem.nb.html
+    - text: "Data Dive"
+      href: data.nb.html
