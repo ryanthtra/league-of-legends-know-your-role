@@ -214,11 +214,52 @@ $(document).ready(function () {
 
 <p>While exploring, analyzing, and visualizing the players’ match data of four professional eSports leagues and an international tournament, we were able to discover distinguishable features of the five team roles (Top, Jungle, Mid, Bot Carry, and Support) when we calculated the per-game averages of individual players.</p>
 <p>Based on this discovery, we first split the per-game averages per-player dataset into a 40/60 train/test pair. Then, we ran the <strong>k-means clustering</strong> algorithm through the training set, which showed 100 percent accuracy in classifying each per-game averages observation to one of five team roles. We then used the centroids computed by the k-means algorithm as the <strong><em>model</em></strong> for running the <strong>k-nearest-neighbor (knn) clustering</strong> algorithm through the per-game averages testing/validating set, which also showed 100 percent accuracy. Finally, we used the same <strong>k-means model</strong> to run the <strong>knn algorithm</strong> through the <strong><em>real</em></strong> test set, which contained single-game performance data of individual players. The <strong>knn</strong> run through the single-game performance data set showed that the model was <strong>94.7 percent accurate</strong> and achieved a <strong>Kappa score of 0.9346</strong>.</p>
-<p>To conclude, the <strong>k-means centroids model</strong> proved to be very accurate in classifying individual game performances of the Spring 2018 Season to an appropriate team role via the <strong>knn algorithm</strong>. While not absolutely perfect, this model (and model-making process) could be an excellent tool for classifying team roles in Normal/Blind Pick Summoner’s Rift game modes, where team roles cannot be assumed based on Participant ID alone. However, we must also consider caveats such as these:</p>
-<p><strong><em>Metas Change:</em></strong> Riot Games routinely makes changes to League of Legends – sometimes minor but sometimes paradigm-shifting. What may be a winning strategy in the present could be a losing one in the future, and that occasionally includes changing certain champions’ team roles.</p>
-<p><strong><em>Normal/Blind Pick Game Mode is Lower-Stakes:</em></strong> Because the competitiveness of this game mode can often times be less intense, players are more likely to experiment, which includes playing champions in atypical team roles.</p>
-<p><strong><em>Unique Champions:</em></strong> As mentioned before, some champions can play and succeed in a team role but may output performance data that is fitting of a different role. Swain and Vladimir are powerful Top Laners but are also mages. Gangplank is a dominant Top Laner with a damage output comparable to that of a Botlane Carry. Ivern is a Jungler but only equips one starting jungler item and plays more like a Support.</p>
-<p><strong><em>Pros are Pros:</em></strong> The level of competition in a professional LoL eSports league is a considerable step up from the Regular Joes playing the game. Even within the LoL game itself, the ranking system divides players in multiple tiers, where the “worst” players are in the Bronze division, while professionals (playing in their free time) and near-professionals are usually in the Master or Challenger divisions. Thus, the average output data of team roles may vary considerably from division to division.</p>
+<section id="caveats" class="level2">
+<h2>Caveats</h2>
+<section id="meta-changes" class="level4">
+<h4>Meta Changes:</h4>
+<p>Riot Games routinely makes changes to League of Legends – sometimes minor but sometimes paradigm-shifting. What may be a winning strategy in the present could be a losing one in the future, and that occasionally includes changing certain champions’ team roles.</p>
+</section>
+<section id="normalblind-pick-game-mode-is-lower-stakes" class="level4">
+<h4>Normal/Blind Pick Game Mode is Lower-Stakes:</h4>
+<p>Because the competitiveness of this game mode can often times be less intense, players are more likely to experiment, which includes playing champions in atypical team roles.</p>
+</section>
+<section id="unique-champions" class="level4">
+<h4>Unique Champions:</h4>
+<p>As mentioned before, some champions can play and succeed in a team role but may output performance data that is fitting of a different role. Swain and Vladimir are powerful Top Laners but are also mages. Gangplank is a dominant Top Laner with a damage output comparable to that of a Botlane Carry. Ivern is a Jungler but only equips one starting jungler item and plays more like a Support.</p>
+</section>
+<section id="pros-are-pros" class="level4">
+<h4>Pros are Pros:</h4>
+<p>The level of competition in a professional LoL eSports league is a considerable step up from the Regular Joes playing the game. Even within the LoL game itself, the ranking system divides players in multiple tiers, where the “worst” players are in the Bronze division, while professionals (playing in their free time) and near-professionals are usually in the Master or Challenger divisions. Thus, the average output data of team roles may vary considerably from division to division.</p>
+</section>
+</section>
+<section id="ideas-for-further-research-and-recommendations" class="level2">
+<h2>Ideas For Further Research and Recommendations</h2>
+<section id="larger-datasets" class="level4">
+<h4>Larger Datasets:</h4>
+<p>While 696 matches seems like a lot, it is but a tiny sample of the millions of League of Legends matches that occurs in a span of the four months in which the 2018 Spring Split season occurred. Besides scraping matches from <a href="https://www.lolesports.com/en_US/">lolesports.com</a>, one could access a large tree of matches off of a single username alone, as the JSON response for a single match includes a <code>participantIdentities</code> object, which, if expanded, contains a <code>matchHistoryUri</code> for all ten match participants. Thus, one can use those <code>matchHistoryUri</code>s to access more matches, which give access to more <code>matchHistoryUri</code>s, and so on and so forth.</p>
+</section>
+<section id="additional-data" class="level4">
+<h4>Additional Data:</h4>
+<p>Each match ID can also access another API, called Timeline. For example, the timeline for <a href="https://acs.leagueoflegends.com/v1/stats/game/TRLH1/1002570087/timeline?gameHash=e506fdec16a5629d">MSI Finals Game 1, Royal Never Give Up vs. King-Zone DragonX</a> contains a record of notable events that occurred in each of the 31+ minutes of the match. Perhaps timeline data could be used to supplement general match data when crafting a classification model.</p>
+</section>
+<section id="alternative-k-means-model-crafting" class="level4">
+<h4>Alternative k-means Model-Crafting:</h4>
+<p>In this report, the model used for classifying individual match performances were created using k-means clustering on a dataset containing per-game player averages from professional eSports matches. While future models could still rely on per-game player (and assume team role) averages, one could instead cluster individual performances into the five assumed groups.</p>
+</section>
+<section id="crafting-models-per-division" class="level4">
+<h4>Crafting Models per Division:</h4>
+<p>As a previously-mentioned caveat, there exist seven different tiers in LoL Ranked play based on the performance quality of the players themselves, and it is possible that the statistical output may differ considerable from tier to tier. Thus, one could craft a model for each of the seven tiers.</p>
+</section>
+<section id="crafting-models-per-minor-patch-verion" class="level4">
+<h4>Crafting Models per Minor Patch Verion:</h4>
+<p>As another caveat, the patches that Riot Games periodically releases for LoL can occasionally shift the meta of the game, which could significantly change the typical statistical output of the five team roles.</p>
+</section>
+</section>
+<section id="to-conclude" class="level2">
+<h2>TO CONCLUDE</h2>
+<p>The <strong>k-means centroids model</strong> proved to be very accurate in classifying individual game performances of the Spring 2018 Season to an appropriate team role via the <strong>knn algorithm</strong>. While not absolutely perfect, this model (and model-making process) could be an excellent tool for classifying team roles in Normal/Blind Pick Summoner’s Rift game modes, where team roles cannot be assumed based on Participant ID alone.</p>
+</section>
 
 
 
