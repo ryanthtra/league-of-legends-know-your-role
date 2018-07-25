@@ -1,0 +1,30 @@
+.title {
+  display: none;
+}
+.author, .date {
+  margin-bottom: -10%;
+}
+.img-logo, .img-league-logo {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.img-subtitle {
+  width: 50px;
+  height: 50px;
+  margin-bottom: -8px !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.subtitle-text {
+  font-size: 50px !important;
+  text-align: center;
+}
+.rift-map {
+  text-align: center;
+}
+.img-rift-map {
+  width: 70%;
+  height: 70%;
+}
