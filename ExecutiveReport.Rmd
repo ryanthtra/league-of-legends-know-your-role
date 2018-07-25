@@ -159,6 +159,15 @@ kable(table_roles, caption = "Predicted Roles (Rows) vs. Actual/Assumed Roles (C
 remove(nalcs_season_match_data)
 ```
 
+## Why Should We Care?
+
+>- Most LoL analytics websites only track Draft Pick mode matches because of safe assumption of team roles
+>- Some only track Ranked (ladder) matches
+>- Normal Draft Pick requires owning/having available at least 20 champions
+>- Ranked Draft Pick requires owning at least 20 champions plus being Gamer/Summoner Level 30
+>- Granting sites ability to analyze team role performace in Blind Pick matches adds another avenue of engagement for newcomers/casuals in order to graduate to dedicated/hardcore
+>- Provide additional team role-focused metrics when testing new/reworked champions
+
 # The Data
 
 ## Data Overview
@@ -168,6 +177,22 @@ remove(nalcs_season_match_data)
 >- Data for all matches in the 2018 Spring Split seasons of the North America LoL Championship Series (NALCS), the Europe LoL Championship Series (EULCS), LoL Champions Korea (LCK), and LoL Master Series (LMS), plus the 2018 Mid-Season Invitational (MSI)
 >- Each match data accessed using API domain https://acs.leagueoflegends.com/v1/stats/game/
 
+## Synopsis of Individual Match Player Datasets
+
+- NA LCS: 117 matches, 1170 observations
+- EU LCS: 115 matches, 1150 observations
+- LCK: 246 matches, 2460 observations
+- LMS: 144 matches, 1440 observations
+- MSI: 74 matches, 740 observations
+
+## Synopsis of Per-Match Average Datasets
+
+- NA LCS: 56 players
+- EU LCS: 57 players
+- LCK: 81 players
+- LMS: 69 players
+- MSI: 74 players
+- (More technical details below...)
 
 ## Obtaining API and Match IDs
 
@@ -192,14 +217,6 @@ kable(head(read.csv("gameid_data/NALCS_Spring2018.csv")) %>% select(c(1:5)), cap
 >- basically, ```participants``` is flattened out, then joined with ```player```
 >- final product for single match is 10 rows and  nearly 150 columns/variables
 >- process repeated for all other matches, and tables are concatenated together 
-
-## Synopsis of Match Player Datasets
-
-- NA LCS: 117 matches, 1170 observations
-- EU LCS: 115 matches, 1150 observations
-- LCK: 246 matches, 2460 observations
-- LMS: 144 matches, 1440 observations
-- MSI: 74 matches, 740 observations
 
 ## Sample of MSI 2018 Match Player Dataset
 
@@ -540,9 +557,14 @@ kable(table_roles, caption = "Predicted Roles (Rows) vs. Actual/Assumed Roles (C
 
 # The Future and Recommendations
 
-## The Future and Recommendations
+## Application of Solution
 
->- Larger datasets: virtually endless number of non-custom matches can be accessed off of one username alone due to recursive nature of accessing match history.
+>- Train model by running **k-means** on sample of Draft Pick mode matches, then run **knn** on subsequent matches of any game mode to classify team roles
+>- When creating new champions or reworking current ones, while in test, can run the model to see if champion is performing certain team roles as expected
+
+## Future Refinements
+
+>- Larger datasets: virtually endless number of non-custom matches can be accessed off of one username alone due to recursive nature of accessing match history
 >- Additional data (i.e., the ```timeline``` API using match IDs)
 >- Alternative k-means training
 >- Creating models per division
@@ -552,4 +574,8 @@ kable(table_roles, caption = "Predicted Roles (Rows) vs. Actual/Assumed Roles (C
 
 >- Draft Pick game modes allow safe assumptions on team roles
 >- Limits the number of matches analytics sites can use for analyzing champion and team role performances
->- While not absolutely perfect, model could provide excellent tool for classifying team roles in Blind Pick Summoner's Rift game modes,where team roles cannot be assumed based on Participant ID alone.
+>- While not absolutely perfect, model could provide excellent tool for classifying team roles in Blind Pick Summoner's Rift game modes,where team roles cannot be assumed based on Participant ID alone
+
+## The End
+
+<img src="img/victory.gif">
