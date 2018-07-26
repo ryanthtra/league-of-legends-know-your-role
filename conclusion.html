@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Conclusion</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">LoL: Know Your Role</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="problem.nb.html">Problem</a>
+</li>
+<li>
+  <a href="data.nb.html">Data Dive</a>
+</li>
+<li>
+  <a href="analysis.nb.html">Exploratory Analysis</a>
+</li>
+<li>
+  <a href="machine-learning.nb.html">Machine Learning</a>
+</li>
+<li>
+  <a href="conclusion.html">Conclusion</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Conclusion</h1>
+
+</div>
+
+
+<p>While exploring, analyzing, and visualizing the players’ match data of four professional eSports leagues and an international tournament, we were able to discover distinguishable features of the five team roles (Top, Jungle, Mid, Bot Carry, and Support) when we calculated the per-game averages of individual players.</p>
+<p>Based on this discovery, we first split the per-game averages per-player dataset into a 40/60 train/test pair. Then, we ran the <strong>k-means clustering</strong> algorithm through the training set, which showed 100 percent accuracy in classifying each per-game averages observation to one of five team roles. We then used the centroids computed by the k-means algorithm as the <strong><em>model</em></strong> for running the <strong>k-nearest-neighbor (knn) clustering</strong> algorithm through the per-game averages testing/validating set, which also showed 100 percent accuracy. Finally, we used the same <strong>k-means model</strong> to run the <strong>knn algorithm</strong> through the <strong><em>real</em></strong> test set, which contained single-game performance data of individual players. The <strong>knn</strong> run through the single-game performance data set showed that the model was <strong>94.7 percent accurate</strong> and achieved a <strong>Kappa score of 0.9346</strong>.</p>
+<section id="caveats" class="level2">
+<h2>Caveats</h2>
+<section id="meta-changes" class="level4">
+<h4>Meta Changes:</h4>
+<p>Riot Games routinely makes changes to League of Legends – sometimes minor but sometimes paradigm-shifting. What may be a winning strategy in the present could be a losing one in the future, and that occasionally includes changing certain champions’ team roles.</p>
+</section>
+<section id="normalblind-pick-game-mode-is-lower-stakes" class="level4">
+<h4>Normal/Blind Pick Game Mode is Lower-Stakes:</h4>
+<p>Because the competitiveness of this game mode can often times be less intense, players are more likely to experiment, which includes playing champions in atypical team roles.</p>
+</section>
+<section id="unique-champions" class="level4">
+<h4>Unique Champions:</h4>
+<p>As mentioned before, some champions can play and succeed in a team role but may output performance data that is fitting of a different role. Swain and Vladimir are powerful Top Laners but are also mages. Gangplank is a dominant Top Laner with a damage output comparable to that of a Botlane Carry. Ivern is a Jungler but only equips one starting jungler item and plays more like a Support.</p>
+</section>
+<section id="pros-are-pros" class="level4">
+<h4>Pros are Pros:</h4>
+<p>The level of competition in a professional LoL eSports league is a considerable step up from the Regular Joes playing the game. Even within the LoL game itself, the ranking system divides players in multiple tiers, where the “worst” players are in the Bronze division, while professionals (playing in their free time) and near-professionals are usually in the Master or Challenger divisions. Thus, the average output data of team roles may vary considerably from division to division.</p>
+</section>
+</section>
+<section id="ideas-for-further-research-and-recommendations" class="level2">
+<h2>Ideas For Further Research and Recommendations</h2>
+<section id="larger-datasets" class="level4">
+<h4>Larger Datasets:</h4>
+<p>While 696 matches seems like a lot, it is but a tiny sample of the millions of League of Legends matches that occurs in a span of the four months in which the 2018 Spring Split season occurred. Besides scraping matches from <a href="https://www.lolesports.com/en_US/">lolesports.com</a>, one could access a large tree of matches off of a single username alone, as the JSON response for a single match includes a <code>participantIdentities</code> object, which, if expanded, contains a <code>matchHistoryUri</code> for all ten match participants. Thus, one can use those <code>matchHistoryUri</code>s to access more matches, which give access to more <code>matchHistoryUri</code>s, and so on and so forth.</p>
+</section>
+<section id="additional-data" class="level4">
+<h4>Additional Data:</h4>
+<p>Each match ID can also access another API, called Timeline. For example, the timeline for <a href="https://acs.leagueoflegends.com/v1/stats/game/TRLH1/1002570087/timeline?gameHash=e506fdec16a5629d">MSI Finals Game 1, Royal Never Give Up vs. King-Zone DragonX</a> contains a record of notable events that occurred in each of the 31+ minutes of the match. Perhaps timeline data could be used to supplement general match data when crafting a classification model.</p>
+</section>
+<section id="alternative-k-means-model-crafting" class="level4">
+<h4>Alternative k-means Model-Crafting:</h4>
+<p>In this report, the model used for classifying individual match performances were created using k-means clustering on a dataset containing per-game player averages from professional eSports matches. While future models could still rely on per-game player (and assume team role) averages, one could instead cluster individual performances into the five assumed groups.</p>
+</section>
+<section id="crafting-models-per-division" class="level4">
+<h4>Crafting Models per Division:</h4>
+<p>As a previously-mentioned caveat, there exist seven different tiers in LoL Ranked play based on the performance quality of the players themselves, and it is possible that the statistical output may differ considerable from tier to tier. Thus, one could craft a model for each of the seven tiers.</p>
+</section>
+<section id="crafting-models-per-minor-patch-verion" class="level4">
+<h4>Crafting Models per Minor Patch Verion:</h4>
+<p>As another caveat, the patches that Riot Games periodically releases for LoL can occasionally shift the meta of the game, which could significantly change the typical statistical output of the five team roles.</p>
+</section>
+</section>
+<section id="to-conclude" class="level2">
+<h2>TO CONCLUDE</h2>
+<p>The <strong>k-means centroids model</strong> proved to be very accurate in classifying individual game performances of the Spring 2018 Season to an appropriate team role via the <strong>knn algorithm</strong>. While not absolutely perfect, this model (and model-making process) could be an excellent tool for classifying team roles in Normal/Blind Pick Summoner’s Rift game modes, where team roles cannot be assumed based on Participant ID alone.</p>
+</section>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
