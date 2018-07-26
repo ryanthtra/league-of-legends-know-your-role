@@ -130,7 +130,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <img src="img/match-overview.png">
 
-## Assumed Team Roles -- Draft Pick Match
+## Assumed Team Roles -- eSports Match
 
 ```{r echo = FALSE, results = "asis"}
 library(knitr)
@@ -140,6 +140,10 @@ RedTeam <- c(6,7,8,9,10)
 df_roles <- data.frame(TeamRole, BlueTeam, RedTeam)
 kable(df_roles, caption = "Assumed Team Role Participant IDs -- Draft Pick Match")
 ```
+
+## Explicit Team Roles -- Draft Pick Mode Selection Screen
+
+<img src="img/draft-pick.png">
 
 ## Team Roles -- Match Overview, Blind Pick Format
 
@@ -161,7 +165,7 @@ remove(nalcs_season_match_data)
 
 ## Why Should We Care?
 
->- Most LoL analytics websites only track Draft Pick mode matches because of safe assumption of team roles
+>- Most LoL analytics websites only track Draft Pick mode matches because of extracting explicit team roles
 >- Some only track Ranked (ladder) matches
 >- Normal Draft Pick requires owning/having available at least 20 champions
 >- Ranked Draft Pick requires owning at least 20 champions plus being Gamer/Summoner Level 30

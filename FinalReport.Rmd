@@ -35,7 +35,7 @@ Fortunately, Riot Games provides post-match data of teams and individual players
 
 ### Why Solving the Problem Matters
 
-In the Summoner's Rift game modes for Classic 5v5 matches, Draft Pick and Ranked, because the players' selection of champions are done and revealed in a structured order, team roles are always assigned the same Participant IDs according to which side of the map the players are on:
+For eSports matches, because the players' selection of champions are done and revealed in a structured order, team roles are always assigned the same Participant IDs according to which side of the map the players are on:
 
 ```{r echo = FALSE, results = "asis"}
 library(knitr)
@@ -44,8 +44,12 @@ BlueTeam <- c(1,2,3,4,5)
 RedTeam <- c(6,7,8,9,10)
 df_roles <- data.frame(TeamRole, BlueTeam, RedTeam)
 kable(df_roles, caption = 
-        "Assumed Team Role Participant IDs -- Draft Pick, Ranked, eSports")
+        "Assumed Team Role Participant IDs -- eSports")
 ```
+
+For "regular players", The Summoner's Rift Draft Pick modes (Normal and Ranked), while the selection of champions are also done in order, the team roles on both teams may not necessarily be in the same order, though team roles themselves are assigned systematically before drafting begins, as shown in the Figure 2.  As such, most analytics sites probably use an alternative form of web-scraping in order to extract the team role orders from this game mode.
+
+![Draft Pick Mode, Selection Screen](img/draft-pick.png)
 
 While nothing is preventing teammates from swapping team roles before a match or even during a match (e.g., a ***Top Laner*** picks Smite as a summoner spell or has the Unsealed Spellbook keystone rune and swaps their current summoner spell for Smite and becomes a de facto ***Jungler***), it's safe to assume that the assignment of these team roles are cemented in place.
 
@@ -73,7 +77,7 @@ For instance, there are a significant number of ***Mid*** and ***Top Laners*** b
 
 One reason to make this theory is because there are two popular tactics used before the laning phase.  One is **counter-jungling** (invading the enemy ***Jungler***), and the other is **leashing** (providing early assistance to the ***Jungler*** teammate in killing their first jungle monster).  One or more non-Jungler teammates are optional for the former but required for the latter.  Therefore, when the time comes for the system to assign the ```role-lane```, those teammates who are still in the jungle may inadvertantly be assigned the ```NONE, JUNGLE``` ```role-lane``` combination.
 
-While the auto-classification system has shown to be flawed, at least it's safe to assume team roles for Draft Pick, Ranked, and eSports matches due to the structure cited in Figure 1, and many third-party League of Legends analytics websites, such as [op.gg](http://na.op.gg), [champion.gg](https://champion.gg), and [mobalytics.gg](https://mobalytics.gg), appear to make that assumption.  However, these sites miss out on analyzing data from Blind Pick matches, in which team role assumptions cannot be made.  If the auto-classification system can be improved upon, then both Riot Games and these third-party websites can utilize this improved system for their future analytics.
+While the auto-classification system has shown to be flawed, at least it's safe to assume team roles for eSports matches due to the structure cited in Figure 1, and many third-party League of Legends analytics websites, such as [op.gg](http://na.op.gg), [champion.gg](https://champion.gg), and [mobalytics.gg](https://mobalytics.gg), likely use other web-scraping means to extract team roles in the Draft Pick modes.  However, these sites miss out on analyzing data from Blind Pick matches, in which team role assumptions cannot be made nor can they be extracted.  If the auto-classification system can be improved upon, then both Riot Games and these third-party websites can utilize this improved system for their future analytics.
 
 # Diving into the Data
 The datasets we'll be using to solve this problem were obtained and wrangled from the match data of the 2018 Spring Split seasons of four different professional Lol eSports leagues: the North America LoL Championship Series (NALCS), the Europe LoL Championship Series (EULCS), LoL Champions Korea (LCK), and LoL Master Series (LMS), plus the 2018 Mid-Season Invitational (MSI), an international tournament similar to the UEFA Champions League in Football/Soccer.  Specifically, for solving the problem, we'll use datasets that contain individual performance data of all players of each match of the eSports Leagues' season, and we'll also use those datasets to create per-game performance datasets.
@@ -96,13 +100,13 @@ In-depth details about how the data was obtained and wrangled can be found in th
 #### 1. Discovering the API for obtaining match data
 eSports matches were found in [**lolesports.com**](https://www.lolesports.com).  While an individual match that has already concluded can easily be found by just clicking/tapping links alone, finding matches during the 2018 Spring Splits currently requires some manual hacking of the URL to reach them, such as [**NA LCS 2018 Spring Split Week 1**](https://www.lolesports.com/en_US/na-lcs/na_2018_spring/schedule/regular_season/1).
 
-From here, we can click away to find an individual match's details, such as [**NA LCS 2018 Spring Split Week 1, Day 1, Team Liquid vs. TSM**](https://matchhistory.na.leagueoflegends.com/en/#match-details/TRLH1/1002440062?gameHash=a3b08c115923f00d&tab=overview).  On this page, we can get find the API we need by opening the browser's Web Inspector, as shown in Figure 1.
+From here, we can click away to find an individual match's details, such as [**NA LCS 2018 Spring Split Week 1, Day 1, Team Liquid vs. TSM**](https://matchhistory.na.leagueoflegends.com/en/#match-details/TRLH1/1002440062?gameHash=a3b08c115923f00d&tab=overview).  On this page, we can get find the API we need by opening the browser's Web Inspector, as shown in Figure 3.
 
 ![Web Inspector on Match Overiew Web Page.](img/data-wrangling/04.png)
 
 
 #### 2. Accumulating match IDs for the API
-We can find the match IDs the same way we found the API.  Figures 3 and 4 show the match ID strings we need to obtain match data for a particular match.
+We can find the match IDs the same way we found the API.  Figures 4 and 5 show the match ID strings we need to obtain match data for a particular match.
 
 ![Browser URL for Match Overview Web Page](img/data-wrangling/05.png)
 
