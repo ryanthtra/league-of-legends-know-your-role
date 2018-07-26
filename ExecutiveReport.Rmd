@@ -126,7 +126,7 @@ knitr::opts_chunk$set(echo = TRUE)
 >- Humanly impossible to visually observe every match and record team roles manually.
 >- ***Can we use match data and machine learning to distinguish all five team roles from each other?***
 
-## Team Roles -- Match Overview, Draft Pick Format
+## Team Roles -- Match Overview, eSports
 
 <img src="img/match-overview.png">
 
