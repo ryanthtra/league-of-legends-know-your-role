@@ -14,7 +14,8 @@ Fortunately, Riot Games provides post-match data of teams and individual players
 
 ### Why Solving the Problem Matters
 
-In the Summoner's Rift game modes for Classic 5v5 matches, Draft Pick and Ranked, because the players' selection of champions are done and revealed in a structured order, team roles are always assigned the same Participant IDs according to which side of the map the players are on:
+For eSports matches, because the players' selection of champions are done and revealed in a structured order, team roles are always assigned the same Participant IDs according to which side of the map the players are on:
+
 
 ```{r echo = FALSE, results = "asis"}
 library(knitr)
@@ -22,8 +23,12 @@ TeamRole <- c("Top", "Jungle", "Mid", "BotCarry", "Support")
 BlueTeam <- c(1,2,3,4,5)
 RedTeam <- c(6,7,8,9,10)
 df_roles <- data.frame(TeamRole, BlueTeam, RedTeam)
-kable(df_roles, caption = "Figure 1: Assumed Team Role Participant IDs -- Draft Pick, Ranked, eSports")
+kable(df_roles, caption = "Figure 1: Assumed Team Role Participant IDs -- eSports")
 ```
+
+For "regular players", The Summoner's Rift Draft Pick modes (Normal and Ranked), while the selection of champions are also done in order, the team roles on both teams may not necessarily be in the same order, though team roles themselves are assigned systematically before drafting begins, as shown in the Figure 2.  As such, most analytics sites probably use an alternative form of web-scraping in order to extract the team role orders from this game mode.
+
+![Figure 2: Draft Pick Mode, Selection Screen](img/draft-pick.png)
 
 While nothing is preventing teammates from swapping team roles before a match or even during a match (e.g., a ***Top Laner*** picks Smite as a summoner spell or has the Unsealed Spellbook keystone rune and swaps their current summoner spell for Smite and becomes a de facto ***Jungler***), it's safe to assume that the assignment of these team roles are cemented in place.
 
@@ -50,4 +55,4 @@ For instance, there are a significant number of ***Mid*** and ***Top Laners*** b
 
 One reason to make this theory is because there are two popular tactics used before the laning phase.  One is **counter-jungling** (invading the enemy ***Jungler***), and the other is **leashing** (providing early assistance to the ***Jungler*** teammate in killing their first jungle monster).  One or more non-Jungler teammates are optional for the former but required for the latter.  Therefore, when the time comes for the system to assign the ```role-lane```, those teammates who are still in the jungle may inadvertantly be assigned the ```NONE, JUNGLE``` ```role-lane``` combination.
 
-While the auto-classification system has shown to be flawed, at least it's safe to assume team roles for Draft Pick, Ranked, and eSports matches due to the structure cited in Figure 1, and many third-party League of Legends analytics websites, such as [op.gg](http://na.op.gg), [champion.gg](https://champion.gg), and [mobalytics.gg](https://mobalytics.gg), appear to make that assumption.  However, these sites miss out on analyzing data from Blind Pick matches, in which team role assumptions cannot be made.  If the auto-classification system can be improved upon, then both Riot Games and these third-party websites can utilize this improved system for their future analytics.
+While the auto-classification system has shown to be flawed, at least it's safe to assume team roles for eSports matches due to the structure cited in Figure 1, and many third-party League of Legends analytics websites, such as [op.gg](http://na.op.gg), [champion.gg](https://champion.gg), and [mobalytics.gg](https://mobalytics.gg), likely use other web-scraping means to extract team roles in the Draft Pick modes.  However, these sites miss out on analyzing data from Blind Pick matches, in which team role assumptions cannot be made nor can they be extracted.  If the auto-classification system can be improved upon, then both Riot Games and these third-party websites can utilize this improved system for their future analytics.
