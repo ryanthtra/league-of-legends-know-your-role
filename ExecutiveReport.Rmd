@@ -44,10 +44,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <img class="img-logo" src="img/surrender.png">
 
->- Blind Pick game modes don't provide way to identify roles
->- Means that huge set of matches left out of most analytics apps
->- Created a machine learning model to classify team roles from individual match performances
->- Model was able to assign 6960 indivual performances from professional LoL eSports matches to one of five team roles with 94.7% accuracy
+- Blind Pick game modes don't provide way to identify roles
+- Means that huge set of matches left out of most analytics apps
+- Created a machine learning model to classify team roles from individual match performances
+- Model was able to assign 6960 indivual performances from professional LoL eSports matches to one of five team roles with 94.7% accuracy
 
 # Background
 
