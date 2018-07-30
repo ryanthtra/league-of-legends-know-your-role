@@ -55,7 +55,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 >- A free-to-play, multiplayer online battle arena (MOBA) videogame
 >- Developed and published by Riot Games
->- ~100 million active players a month
+>- ~67 million active players a month
 >- ~100k viewers during peak hours on Twitch.tv
 >- Active and popular professional eSports scene
 >- Numerous 3rd party websites and books on gameplay strategies
