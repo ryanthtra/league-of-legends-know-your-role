@@ -30,6 +30,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Outline
 
+- ggwp / tl;dr
 - Background
 - Team Roles
 - The Problem
@@ -39,13 +40,22 @@ knitr::opts_chunk$set(echo = TRUE)
 - Conclusion
 - The Future and Recommendations
 
+## ggwp / tl;dr
+
+<img class="img-logo" src="img/surrender.png">
+
+- Blind Pick game modes don't provide way to identify roles
+- Means that huge set of matches left out of most analytics apps
+- Created a machine learning model to classify team roles from individual match performances
+- Model was able to assign 6960 indivual performances from professional LoL eSports matches to one of five team roles with 94.7% accuracy
+
 # Background
 
 ## What is League of Legends?
 
 >- A free-to-play, multiplayer online battle arena (MOBA) videogame
 >- Developed and published by Riot Games
->- ~100 million active players a month
+>- ~67 million active players a month
 >- ~100k viewers during peak hours on Twitch.tv
 >- Active and popular professional eSports scene
 >- Numerous 3rd party websites and books on gameplay strategies
@@ -126,7 +136,7 @@ knitr::opts_chunk$set(echo = TRUE)
 >- Humanly impossible to visually observe every match and record team roles manually.
 >- ***Can we use match data and machine learning to distinguish all five team roles from each other?***
 
-## Team Roles -- Match Overview, Draft Pick Format
+## Team Roles -- Match Overview, eSports
 
 <img src="img/match-overview.png">
 
@@ -323,76 +333,7 @@ nalcs_matches_player_avgs %>%
 
 # Machine Learning Models
 
-## Feature Set for Machine Learning 1
-
-```{r echo = FALSE, results = "asis"}
-library(knitr)
-variableName <- c("kills", "assists", "magicDamageDealt", "physicalDamageDealt", 
-                  "magicDamageDealtToChampions", "physicalDamageDealtToChampions", 
-                  "totalHeal")
-description <- c("The number of enemy champions killed.", 
-"The number of enemy champions assisted in killing.", 
-"The amount of magic damage dealt.", 
-"The amount of physical damage dealt.", 
-"The amount of magic damage dealt to enemy champions only.",
-"The amount of physical damage dealt to enemy champions only.", 
-"The amount of health points the player has regained.")
-df_vars <- data.frame(variableName, description)
-kable(df_vars)
-```
-
-## Feature Set for Machine Learning 2
-
-```{r echo = FALSE, results = "asis"}
-library(knitr)
-variableName <- c("totalUnitsHealed", "damageSelfMitigated", "totalDamageTaken",  
-                  "neutralMinionsKilled", "timeCCingOthers", "totalTimeCrowdControlDealt", 
-                  "champLevel")
-description <- c( 
-"The number of entities a player healed.", 
-"The amount of health points that were not lost from damage.", 
-"The amount of damage a player took from various sources.", 
-"The number of neutral monsters killed by a player.", 
-"The weighted sum of all CC applied", 
-"The sum of all CC applied", 
-"The (experience) level of a player at the end of a match.")
-df_vars <- data.frame(variableName, description)
-kable(df_vars)
-```
-
-## Feature Set for Machine Learning 3
-```{r echo = FALSE, results = "asis"}
-library(knitr)
-variableName <- c("visionWardsBoughtInGame", "wardsPlaced", "wardsKilled",
-                  "physDmgToChampsToDmgTakenRatio", "totalMinionsKilled", 
-                  "damageTakenPerMinDeltas.0.10", "creepsPerMinDeltas.0.10")
-description <- c(
-"The number of wards (i.e. surveillance items) a player purchased.", 
-"The number of wards a player placed in the arena.", 
-"The number of enemy wards  a player destroyed.",
-"Physical damage dealt to champions / Total damage taken", 
-"The number of enemy minions killed.", 
-"The amount of damage taken per minute from 0:00 to 10:00 minutes.", 
-"The number of enemy minions killed per minute from 0:00 to 10:00 minutes.")
-df_vars <- data.frame(variableName, description)
-kable(df_vars)
-```
-
-## Machine Learning Approach
-
-1. Put together all five datasets for player per-match averages, then split the entire set into two subsets: one for training and one for testing.
-2. Create/train a model using the **k-means** clustering algorithm on the training set.  Since we already know how many team roles exist, we set ```k=5```.
-3. Test/validate the model using the **k-nearest-neighbor (knn)** classification algorithm on the testing set.  Since there are only five possible neighbors, and we want to classify each observation to exactly one group (team role), we set ```k=1```.
-
-## Machine Learning Approach (continued)
-
-4. Put together all five datasets for single match player stats.
-5. Test the model using **knn** on the new dataset.
-6. Evaluate performance of Steps 2, 3, and 5 using a **confusion matrix**.
-
-Note: features are scaled using **z-score**.
-
-## Training the Model
+## Results: Training the Model (Per-Game Averages Data)
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(dplyr)
@@ -468,7 +409,7 @@ kable(km_train_table, row.names = TRUE, caption =
         "k-means: Creating Training Model (Predicted Rows vs. Actual Columns)")
 ```
 
-## Validating the Model
+## Results: Validating the Model (Per-Game Averages Data)
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # Using knn to classify observations in the test set
@@ -497,7 +438,7 @@ kable(knn_test_avgs_table, row.names = TRUE, caption =
         "knn: Predict Team Roles w/Per-Game Averages Test Data Set (Predicted Rows vs. Actual Columns)")
 ```
 
-## Testing the Model (Individual Matches Dataset)
+## Results: Testing the Model (Individual Matches Data)
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # Using knn to classify all match-by-match individual performances
@@ -539,6 +480,77 @@ confusionMatrix(knn_test_singles_table)
 table_roles <- table(all_leagues_match_player_stats$roleLane, all_leagues_match_player_stats$teamRole)
 kable(table_roles, caption = "Predicted Roles (Rows) vs. Actual/Assumed Roles (Columns)")
 ```
+
+>- Next: machine learning approach (technical)
+
+## Feature Set for Machine Learning 1
+
+```{r echo = FALSE, results = "asis"}
+library(knitr)
+variableName <- c("kills", "assists", "magicDamageDealt", "physicalDamageDealt", 
+                  "magicDamageDealtToChampions", "physicalDamageDealtToChampions", 
+                  "totalHeal")
+description <- c("The number of enemy champions killed.", 
+"The number of enemy champions assisted in killing.", 
+"The amount of magic damage dealt.", 
+"The amount of physical damage dealt.", 
+"The amount of magic damage dealt to enemy champions only.",
+"The amount of physical damage dealt to enemy champions only.", 
+"The amount of health points the player has regained.")
+df_vars <- data.frame(variableName, description)
+kable(df_vars)
+```
+
+## Feature Set for Machine Learning 2
+
+```{r echo = FALSE, results = "asis"}
+library(knitr)
+variableName <- c("totalUnitsHealed", "damageSelfMitigated", "totalDamageTaken",  
+                  "neutralMinionsKilled", "timeCCingOthers", "totalTimeCrowdControlDealt", 
+                  "champLevel")
+description <- c( 
+"The number of entities a player healed.", 
+"The amount of health points that were not lost from damage.", 
+"The amount of damage a player took from various sources.", 
+"The number of neutral monsters killed by a player.", 
+"The weighted sum of all CC applied", 
+"The sum of all CC applied", 
+"The (experience) level of a player at the end of a match.")
+df_vars <- data.frame(variableName, description)
+kable(df_vars)
+```
+
+## Feature Set for Machine Learning 3
+```{r echo = FALSE, results = "asis"}
+library(knitr)
+variableName <- c("visionWardsBoughtInGame", "wardsPlaced", "wardsKilled",
+                  "physDmgToChampsToDmgTakenRatio", "totalMinionsKilled", 
+                  "damageTakenPerMinDeltas.0.10", "creepsPerMinDeltas.0.10")
+description <- c(
+"The number of wards (i.e. surveillance items) a player purchased.", 
+"The number of wards a player placed in the arena.", 
+"The number of enemy wards  a player destroyed.",
+"Physical damage dealt to champions / Total damage taken", 
+"The number of enemy minions killed.", 
+"The amount of damage taken per minute from 0:00 to 10:00 minutes.", 
+"The number of enemy minions killed per minute from 0:00 to 10:00 minutes.")
+df_vars <- data.frame(variableName, description)
+kable(df_vars)
+```
+
+## Machine Learning Approach
+
+1. Put together all five datasets for player per-match averages, then split the entire set into two subsets: one for training and one for testing.
+2. Create/train a model using the **k-means** clustering algorithm on the training set.  Since we already know how many team roles exist, we set ```k=5```.
+3. Test/validate the model using the **k-nearest-neighbor (knn)** classification algorithm on the testing set.  Since there are only five possible neighbors, and we want to classify each observation to exactly one group (team role), we set ```k=1```.
+
+## Machine Learning Approach (continued)
+
+4. Put together all five datasets for single match player stats.
+5. Test the model using **knn** on the new dataset.
+6. Evaluate performance of Steps 2, 3, and 5 using a **confusion matrix**.
+
+Note: features are scaled using **z-score**.
 
 # Conclusion
 
